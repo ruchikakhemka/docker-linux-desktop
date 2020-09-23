@@ -24,7 +24,7 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc \
 # vscode and azure cli
 
 # Tools
-RUN apt-get install -y xterm tmux firefox \
+RUN apt-get install -y tmux firefox \
     git build-essential ubuntu-standard \
     python2 python2-dev \
     python3 python3-dev \
