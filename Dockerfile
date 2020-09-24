@@ -30,6 +30,7 @@ RUN apt-get install -y tmux firefox \
     python3 python3-dev \
     ruby ruby-dev ruby-bundler \
     golang \
+    vim \
     openjdk-8-jdk openjdk-8-jdk-headless
 # Tools
 
