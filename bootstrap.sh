@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/create-users
+/create-users.sh
 
 # Starting dbus
 service dbus start
