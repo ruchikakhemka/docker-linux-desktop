@@ -9,6 +9,7 @@ do
   chown -R ${Username}:${Username} /home/${Username}
 
   su - ${Username} sh -c "RUNZSH=no; $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-  su - ${Username} sh -c "cd .oh-my-zsh/custom/plugins && git clone https://github.com/zsh-users/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions"
-  su - ${Username} sh -c "rm -rf ~/.asdf; git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0"
+  su - ${Username} sh -c "sed -i s!^plugins=.*!plugins=(git asdf zsh-syntax-highlighting zsh-autosuggestions)! ~/.zshrc"
+  su - ${Username} sh -c "cd .oh-my-zsh/custom/plugins && git clone https://github.com/zsh-users/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions" &
+  su - ${Username} sh -c "rm -rf ~/.asdf; git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0" &
 done
