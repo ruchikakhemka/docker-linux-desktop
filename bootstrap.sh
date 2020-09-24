@@ -3,7 +3,7 @@
 # Starting dbus
 service dbus start
 
-for Username in manali ketan atif prakash;
+for Username in manali ketan atif prakash kannan nisha ashi;
 do
   useradd -ms /usr/bin/zsh ${Username}
   usermod -aG sudo ${Username}
