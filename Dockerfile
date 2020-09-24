@@ -12,7 +12,6 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 # locale
 
-
 # we install this first, because apparently otherwise something with python messes up the apt-get for microsoft repos
 # vscode and azure cli
 RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc \
@@ -53,7 +52,6 @@ RUN if [ "$WindowManager" = "xfce4" ]; then apt-get install -y xubuntu-desktop d
 
 RUN sh -c 'mkdir -p /opt/idea && wget -qO- https://download.jetbrains.com/idea/ideaIU-2020.2.2.tar.gz | tar -zxf - -C /opt/idea --strip-components 1 && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea.sh && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea'
 
-
 # docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
     sh -c "echo \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" > /etc/apt/sources.list.d/docker.list" && \
@@ -63,7 +61,7 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.27.3/docker-c
 # ADD supervisor/dockerd.conf /etc/supervisor/conf.d/dockerd.conf
 # docker
 
-RUN apt-get install -y zsh
+RUN apt-get install -y zsh man-db
 
 ADD bootstrap.sh /
 ADD create-users.sh /

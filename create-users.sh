@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for Username in manali ketan atif prakash kannan nisha ashi divya;
+for Username in manali ketan atif prakash kannan nisha ashi divya swati;
 do
   useradd -ms /usr/bin/zsh ${Username}
   usermod -aG sudo ${Username}
