@@ -19,7 +19,6 @@ RUN apt-get install -y xubuntu-desktop dbus-x11
 RUN apt-get install -y tmux firefox \
     git build-essential ubuntu-standard \
     python2 python2-dev \
-    python3 python3-dev \
     ruby ruby-dev ruby-bundler \
     golang \
     vim \
@@ -47,6 +46,7 @@ RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc \
     && apt-get update && apt-get install -y code azure-cli
 # vscode and azure cli
 
+# idea
 RUN sh -c 'mkdir -p /opt/idea && wget -qO- https://download.jetbrains.com/idea/ideaIU-2020.2.2.tar.gz | tar -zxf - -C /opt/idea --strip-components 1 && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea.sh && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea'
 
 # docker
