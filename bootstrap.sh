@@ -1,7 +1,7 @@
 #!/bin/bash
 
-/create-users.sh
+/create-users
 
 # Starting dbus
 service dbus start
-/usr/bin/supervisord -n
+exec /usr/bin/supervisord -n

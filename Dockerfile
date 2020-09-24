@@ -41,7 +41,7 @@ RUN adduser xrdp ssl-cert
 RUN sed -i '/TerminalServerUsers/d' /etc/xrdp/sesman.ini && \
     sed -i '/TerminalServerAdmins/d' /etc/xrdp/sesman.ini && \
     xrdp-keygen xrdp auto
-ADD xrdp.conf /etc/supervisor/conf.d/xrdp.conf
+ADD supervisor/xrdp.conf /etc/supervisor/conf.d/xrdp.conf
 # End remote access
 
 ARG WindowManager=openbox
@@ -52,6 +52,16 @@ RUN if [ "$WindowManager" = "xfce4" ]; then apt-get install -y xubuntu-desktop d
 # Window manager
 
 RUN sh -c 'mkdir -p /opt/idea && wget -qO- https://download.jetbrains.com/idea/ideaIU-2020.2.2.tar.gz | tar -zxf - -C /opt/idea --strip-components 1 && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea.sh && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea'
+
+
+# docker
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+    sh -c "echo \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" > /etc/apt/sources.list.d/docker.list" && \
+    apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
+RUN curl -L "https://github.com/docker/compose/releases/download/1.27.3/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+# ADD supervisor/dockerd.conf /etc/supervisor/conf.d/dockerd.conf
+# docker
 
 RUN apt-get install -y zsh
 
