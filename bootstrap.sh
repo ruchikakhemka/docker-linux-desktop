@@ -4,4 +4,4 @@
 
 # Starting dbus
 service dbus start
-exec /usr/bin/supervisord -n
+/usr/bin/supervisord -n
