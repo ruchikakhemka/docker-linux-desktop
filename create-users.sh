@@ -5,7 +5,7 @@ do
   useradd -ms /usr/bin/zsh ${Username}
   usermod -aG sudo ${Username}
   echo ${Username}:${Username} | chpasswd
-  echo "xfce4-session" > /home/${Username}/.xsession
+  echo "mate-session" > /home/${Username}/.xsession
   chown -R ${Username}:${Username} /home/${Username}
 
   su - ${Username} sh -c "RUNZSH=no; $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
