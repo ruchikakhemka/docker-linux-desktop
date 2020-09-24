@@ -6,7 +6,7 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y supervisor sudo wget curl lsb-release ca-certificates curl apt-transport-https gnupg
 
 # locale
-RUN apt-get install -y locales && rm -rf /var/lib/apt/lists/* && \
+RUN apt-get install -y locales && \
     localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
