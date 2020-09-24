@@ -44,7 +44,6 @@ ADD xrdp.conf /etc/supervisor/conf.d/xrdp.conf
 # End remote access
 
 ARG WindowManager=openbox
-ENV Username=someuser
 ENV WindowManager=$WindowManager
 # Window manager
 RUN if [ "$WindowManager" = "mate" ]; then apt-get install -y ubuntu-mate-desktop; fi
@@ -54,14 +53,6 @@ RUN if [ "$WindowManager" = "xfce4" ]; then apt-get install -y xubuntu-desktop d
 RUN sh -c 'mkdir -p /opt/idea && wget -qO- https://download.jetbrains.com/idea/ideaIU-2020.2.2.tar.gz | tar -zxf - -C /opt/idea --strip-components 1 && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea.sh && ln -sf /opt/idea/bin/idea.sh /usr/local/bin/idea'
 
 RUN apt-get install -y zsh
-
-RUN useradd -ms /usr/bin/zsh ${Username} && \
-    usermod -aG sudo ${Username} && \
-    echo ${Username}:${Username} | chpasswd && \
-    echo root:${Username} | chpasswd && \
-    echo "${WindowManager}-session" > /home/${Username}/.xsession && \
-    su - ${Username} sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" && \
-    su - ${Username} sh -c "cd .oh-my-zsh/custom/plugins && git clone https://github.com/zsh-users/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions"
 
 ADD bootstrap.sh /
 CMD /bootstrap.sh
