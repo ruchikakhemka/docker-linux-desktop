@@ -56,6 +56,7 @@ RUN sh -c 'mkdir -p /opt/idea && wget -qO- https://download.jetbrains.com/idea/i
 RUN apt-get install -y zsh
 
 ADD bootstrap.sh /
+ADD create-users.sh /
 CMD /bootstrap.sh
 
 EXPOSE 3389
