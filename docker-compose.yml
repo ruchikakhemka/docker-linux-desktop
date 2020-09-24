@@ -8,8 +8,8 @@ services:
                 WindowManager: xfce4
         image: docker-linux-desktop:xfce4
         container_name: docker-linux-desktop-xfce4
-        environment:
-            Username: someuser
+        volumes:
+            - $HOME/.docker-home-dir:/home
         ports:
         - "33890:3389"
     LinuxDesktopMate:
@@ -20,7 +20,7 @@ services:
                 WindowManager: mate
         image: docker-linux-desktop:mate
         container_name: docker-linux-desktop-mate
-        environment:
-            Username: someuser
+        volumes:
+            - $HOME/.docker-home-dir:/home
         ports:
         - "33890:3389"
