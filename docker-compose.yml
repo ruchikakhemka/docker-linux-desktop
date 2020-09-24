@@ -1,23 +1,9 @@
 version: '2.0'
 services:
-    LinuxDesktopXfce:
-        build:
-            context: .
-            dockerfile: ./Dockerfile
-            args:
-                WindowManager: xfce4
-        image: docker-linux-desktop:xfce4
-        container_name: docker-linux-desktop-xfce4
-        volumes:
-            - $HOME/.docker-home-dir:/home
-        ports:
-        - "3389:3389"
     LinuxDesktopMate:
         build:
             context: .
             dockerfile: ./Dockerfile
-            args:
-                WindowManager: mate
         image: docker-linux-desktop:mate
         container_name: docker-linux-desktop-mate
         volumes:
