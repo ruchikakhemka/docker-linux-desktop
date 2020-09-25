@@ -84,8 +84,8 @@ user_map.each do |user, pass|
     python: '3.7.4',
     sbt: '1.2.6'
   }.each do |tool, version|
-    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf install #{tool} #{version} || true"})
-    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf global #{tool} #{version} || true"})
+    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf install #{tool} #{version} &"})
+    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf global #{tool} #{version} &"})
   end
   # TODO: add talisman
 end
