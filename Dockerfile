@@ -35,11 +35,12 @@ RUN apt-get install -y \
 RUN apt-get install -y ubuntu-mate-desktop
 RUN apt-get purge -y command-not-found python3-commandnotfound
 # browsers
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
-    && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && apt-get install -y firefox
+RUN apt-get install firefox
+# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
+#     && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list \
+#     && apt-get update \
+#     && apt-get install -y google-chrome-stable \
+#     && apt-get install -y firefox
 # Remote access
 RUN apt-get install -y xrdp x11vnc \
     && apt-get install -y tightvncserver \
