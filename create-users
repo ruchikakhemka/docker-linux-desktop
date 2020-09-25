@@ -47,7 +47,7 @@ user_map.each do |user, pass|
   end
 
   # add some default plugins
-  sh(%Q{su - #{user} -c "sed -i 's!^plugins=(git)!plugins=(asdf clipboard git python ruby ubuntu zsh-autosuggestions zsh-syntax-highlighting)!' ~/.zshrc"})
+  sh(%Q{su - #{user} -c "sed -i 's!^plugins=(git)!plugins=(asdf clipboard git python ruby sbt ubuntu zsh-autosuggestions zsh-syntax-highlighting)!' ~/.zshrc"})
   # instal some oh my zsh plugins
 
   unless File.exist?("/home/#{user}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting")
