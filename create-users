@@ -51,7 +51,11 @@ user_map.each do |user, pass|
 
   # install some oh my zsh plugins
 
-  ['https://github.com/zsh-users/zsh-syntax-highlighting', 'https://github.com/zsh-users/zsh-autosuggestions', 'https://github.com/zpm-zsh/clipboard'].each do |plugin_url|
+  [
+    'https://github.com/zsh-users/zsh-syntax-highlighting',
+    'https://github.com/zsh-users/zsh-autosuggestions',
+    'https://github.com/zpm-zsh/clipboard'
+  ].each do |plugin_url|
     plugin_name = File.basename(plugin_url)
     unless File.exist?("/home/#{user}/.oh-my-zsh/custom/plugins/#{plugin_name}")
       sh(%Q{su - #{user} -c "cd ~/.oh-my-zsh/custom/plugins && git clone #{plugin_url} &"})
