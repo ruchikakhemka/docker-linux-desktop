@@ -71,5 +71,11 @@ user_map.each do |user, pass|
   # update asdf + plugins
   sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf update && asdf plugin update --all"})
 
+  {
+    python: '3.7.4',
+    sbt: '1.2.6'
+  }.each do |tool, version|
+    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf where #{tool} #{version} || (asdf install #{tool} #{version} && asdf global #{tool} #{version}) &"})
+  end
   # TODO: add talisman
 end
