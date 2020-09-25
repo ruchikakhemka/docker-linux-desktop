@@ -1,46 +1,75 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-user_map = (
+require 'rake'
+require 'rake/file_utils'
+
+user_map = {
   ashi: '$6$7g2FsNjOJykebwdW$ixS9XP65rzBiHuW1OBnbuUINee6C/LRCG6HTF0c0LcWeqFuHr8U/A8XOy4xqRszUDIiAfmEdliyDDZc6VYOCF1',
   atif: 'atif',
   divya: '$6$mifyQu/bm7exyR2O$V.XscUhSB.UsqN0rQu2AWO8xm16iI6gGyKrhnUYBJ00HdKDxkXLGgMfBVDG8cyckT3dwPb.DgIIzpYPBIHDGM/',
   kannan: '$6$UQa.VXh5CVnL$UYisK6q72NWTzMGxQvxq4CQaX2bPEl7F3yss9ILOgIiNWgVk98x05GRB7OTjr8g2/iWJHJf1JGu6RReWGhgj6.',
-  ketan: '$6$kYKg5X41ik7mIvJg$b0Ny5OR.Fb9adIhUizpF4Xbz87wjv0Y6VTYwk8YUbUgVoEFEEGVkZXMcOXG7xVaxD2gm2W5x.czIfJ3feaCPG1',
+  ketan: '$6$51c6vNavO$HhQ2HNA3V/u7F/9x3cO4Ah1y0Sm12iC9uvZr5QQXUyV4/uQTmZk3ZYFXq8dEBwz1KC5mXesdiALxD.Emwzm9Z1',
   manali: '$6$6hLiUWBex4$VOweF7gGkzm4Hs7NCxTTwDyQGAd03hQHo6djfEZzTvD0snzQ77lZtAPdxMkuuXRtrKW9ZF6Nb9fPgu8z/8H1e1',
   nisha: '$6$917nFHEfuOPzjo7$zxe3YJXKzLetVS7cb20iyIWFJPMVIlQG0UwXL.IJ9huNOWg.sYpLl0SNjPGxEGsx6ZIYlHbK2nLP8bn9WYoD4/',
   prakash: '$6$CCqwu97Rgy.hCN$ZVAnSud.Yezak1afddJ8GZGTzhIoZuNW0SQft7.y57SnX9QX3w.IpJprOgRQfuiiuzRGWh/8nLedFXEfa6PC.1',
   sameer: '$6$9UuvPDRNFudX3i9$oEv370RijN.9m88wXzyrzJo/YQjV/fy1VxUlYWFyw57xPmJHLUZhmwDcALkopSFmLwvbGYxju71d55x6Qjb9z1',
   swati: '$6$M8Hgaqj3XcMFCrQ$2217tigyQ7Bdq1ajXi600ulX/duRWhEfrNADusjijufktxo4fD4U3plvi.hLXrMf7VSTGhbGp2zItmRQdZkH.',
-)
+}
+
+include RakeFileUtils
 
 user_map.each do |user, pass|
   # create user
-  %x[useradd -ms /usr/bin/zsh #{user}]
+  sh(%Q{useradd -ms /usr/bin/zsh #{user}}) do |ok, res|
+    puts "perhaps user exists" unless ok
+  end
 
   # allow sudo
-  %x[usermod -aG sudo #{user}]
+  sh(%Q{usermod -aG sudo #{user}})
 
   # allow user to run `docker` without sudo
-  %x[usermod -aG docker #{user}]
+  sh(%Q{usermod -aG docker #{user}})
 
   # set password
-  %x[echo #{user}:#{pass} | chpasswd #{pass =~ /^\$6/ '--encrypted' : ''}]
+  sh(%Q{echo '#{user}:#{pass}' | chpasswd #{pass =~ /^\$6/ ? '--encrypted' : ''}})
 
   # set the window manager, `mate` in this case, can be `xfce` if installed
-  %x[echo "mate-session" > /home/#{user}/.xsession]
+  sh(%Q{echo "mate-session" > /home/#{user}/.xsession})
 
   # ensure proper ownership of all files, becaues docker restarts sometimes causes the uids/gids to change.
-  %x[chown -R #{user}:#{user} /home/#{user}]
+  sh(%Q{chown -R #{user}:#{user} /home/#{user}})
 
   # install oh my zsh
-  %x[su - #{user} zsh -c "RUNZSH=no; $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"]
+  if File.exist?("/home/#{user}/.oh-my-zsh")
+    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "omz update"})
+  else
+    sh(%Q{su - #{user} -c "RUNZSH=no; $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"})
+  end
+
   # add some default plugins
-  %x[su - #{user} zsh -c "sed -i 's!^plugins=(git)!plugins=(git asdf ruby python zsh-syntax-highlighting zsh-autosuggestions)!' ~/.zshrc"]
+  sh(%Q{su - #{user} -c "sed -i 's!^plugins=(git)!plugins=(asdf clipboard git python ruby ubuntu zsh-autosuggestions zsh-syntax-highlighting)!' ~/.zshrc"})
   # instal some oh my zsh plugins
-  %x[su - #{user} zsh -c "cd .oh-my-zsh/custom/plugins && git clone https://github.com/zsh-users/zsh-syntax-highlighting && git clone https://github.com/zsh-users/zsh-autosuggestions"]
+
+  unless File.exist?("/home/#{user}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting")
+    sh(%Q{su - #{user} -c "cd ~/.oh-my-zsh/custom/plugins && git clone https://github.com/zsh-users/zsh-syntax-highlighting"})
+  end
+
+  unless File.exist?("/home/#{user}/.oh-my-zsh/custom/plugins/zsh-autosuggestions")
+    sh(%Q{su - #{user} -c "cd ~/.oh-my-zsh/custom/plugins && git clone https://github.com/zsh-users/zsh-autosuggestions"})
+  end
 
   # install asdf
-  %x[su - #{user} zsh -c "rm -rf ~/.asdf; git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0"]
+  unless File.exist?("/home/#{user}/.asdf")
+    sh(%Q{su - #{user} -c "git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0"})
+  end
+
+  %w(sbt java ruby python).each do |asdf_plugin|
+    unless File.exist?("/home/#{user}/.asdf/plugins/#{asdf_plugin}")
+      sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf plugin-add #{asdf_plugin}"})
+    end
+  end
+  # update asdf + plugins
+  sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf update && asdf plugin update --all"})
 
   # TODO: add talisman
 end

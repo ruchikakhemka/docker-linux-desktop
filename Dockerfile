@@ -70,9 +70,10 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && chmod +x /usr/local/bin/docker-compose
 ADD supervisor/dockerd.conf /etc/supervisor/conf.d/dockerd.conf
 
+RUN apt-get install -y jq xclip
 
 ADD bootstrap.sh /
-ADD create-users.sh /
+ADD create-users /
 ADD modprobe /usr/local/sbin/
 CMD /bootstrap.sh
 
