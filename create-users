@@ -69,18 +69,17 @@ user_map.each do |user, pass|
 
   %w(sbt java ruby python).each do |asdf_plugin|
     unless File.exist?("/home/#{user}/.asdf/plugins/#{asdf_plugin}")
-      sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf plugin-add #{asdf_plugin} & disown"})
+      sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf plugin-add #{asdf_plugin}"})
     end
   end
   # update asdf + plugins
-  sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf update && asdf plugin update --all & disown"})
+  sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf update && asdf plugin update --all"})
 
   {
     python: '3.7.4',
     sbt: '1.2.6'
   }.each do |tool, version|
-    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf install #{tool} #{version} & disown"})
-    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf global #{tool} #{version} & disown"})
+    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "(source ~/.asdf/asdf.sh; asdf install #{tool} #{version}; asdf global #{tool} #{version}) & disown"})
   end
   # TODO: add talisman
 end
