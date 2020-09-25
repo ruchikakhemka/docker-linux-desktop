@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
 
-require 'rake'
-require 'rake/file_utils'
+if File.basename($PROGRAM_NAME) != 'rake'
+  require 'shellwords'
+  puts "rake -f #{Shellwords.escape($PROGRAM_NAME)} #{Shellwords.shelljoin(ARGV)}"
+  exec "rake -f #{Shellwords.escape($PROGRAM_NAME)} #{Shellwords.shelljoin(ARGV)}"
+end
 
 user_map = {
   ashi: '$6$7g2FsNjOJykebwdW$ixS9XP65rzBiHuW1OBnbuUINee6C/LRCG6HTF0c0LcWeqFuHr8U/A8XOy4xqRszUDIiAfmEdliyDDZc6VYOCF1',
@@ -16,70 +19,73 @@ user_map = {
   swati: '$6$M8Hgaqj3XcMFCrQ$2217tigyQ7Bdq1ajXi600ulX/duRWhEfrNADusjijufktxo4fD4U3plvi.hLXrMf7VSTGhbGp2zItmRQdZkH.',
 }
 
-include RakeFileUtils
-
 user_map.each do |user, pass|
-  # create user
-  sh(%Q{useradd -ms /usr/bin/zsh #{user}}) do |ok, res|
-    puts "perhaps user exists" unless ok
-  end
-
-  # allow sudo
-  sh(%Q{usermod -aG sudo #{user}})
-
-  # allow user to run `docker` without sudo
-  sh(%Q{usermod -aG docker #{user}})
-
-  # set password
-  sh(%Q{echo '#{user}:#{pass}' | chpasswd #{pass =~ /^\$6/ ? '--encrypted' : ''}})
-
-  # set the window manager, `mate` in this case, can be `xfce` if installed
-  sh(%Q{echo "mate-session" > /home/#{user}/.xsession})
-
-  # ensure proper ownership of all files, becaues docker restarts sometimes causes the uids/gids to change.
-  sh(%Q{chown -R #{user}:#{user} /home/#{user}})
-
-  # install oh my zsh
-  if File.exist?("/home/#{user}/.oh-my-zsh")
-    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "omz update"})
-  else
-    sh(%Q{su - #{user} -c "RUNZSH=no; $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"})
-  end
-
-  # add some default plugins
-  sh(%Q{su - #{user} -c "sed -i 's!^plugins=.*!plugins=(asdf clipboard git python ruby sbt ubuntu zsh-autosuggestions zsh-syntax-highlighting)!' ~/.zshrc"})
-
-  # install some oh my zsh plugins
-
-  [
-    'https://github.com/zsh-users/zsh-syntax-highlighting',
-    'https://github.com/zsh-users/zsh-autosuggestions',
-    'https://github.com/zpm-zsh/clipboard'
-  ].each do |plugin_url|
-    plugin_name = File.basename(plugin_url)
-    unless File.exist?("/home/#{user}/.oh-my-zsh/custom/plugins/#{plugin_name}")
-      sh(%Q{su - #{user} -c "cd ~/.oh-my-zsh/custom/plugins && git clone #{plugin_url} & disown"})
+  task user do
+    sh(%Q{useradd -ms /usr/bin/zsh #{user}}) do |ok, res|
+      puts "perhaps user exists" unless ok
     end
-  end
 
-  # install asdf
-  unless File.exist?("/home/#{user}/.asdf")
-    sh(%Q{su - #{user} -c "git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0"})
-  end
+    # allow sudo
+    sh(%Q{usermod -aG sudo #{user}})
 
-  %w(sbt java ruby python).each do |asdf_plugin|
-    unless File.exist?("/home/#{user}/.asdf/plugins/#{asdf_plugin}")
-      sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf plugin-add #{asdf_plugin}"})
+    # allow user to run `docker` without sudo
+    sh(%Q{usermod -aG docker #{user}})
+
+    # set password
+    sh(%Q{echo '#{user}:#{pass}' | chpasswd #{pass =~ /^\$6/ ? '--encrypted' : ''}})
+
+    # set the window manager, `mate` in this case, can be `xfce` if installed
+    sh(%Q{echo "mate-session" > /home/#{user}/.xsession})
+
+    # ensure proper ownership of all files, becaues docker restarts sometimes causes the uids/gids to change.
+    sh(%Q{chown -R #{user}:#{user} /home/#{user}})
+
+    # install oh my zsh
+    if File.exist?("/home/#{user}/.oh-my-zsh")
+      sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "omz update"})
+    else
+      sh(%Q{su - #{user} -c "RUNZSH=no; $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"})
     end
-  end
-  # update asdf + plugins
-  sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf update && asdf plugin update --all"})
 
-  {
-    python: '3.7.4',
-    sbt: '1.2.6'
-  }.each do |tool, version|
-    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "(source ~/.asdf/asdf.sh; asdf install #{tool} #{version}; asdf global #{tool} #{version}) & disown"})
+    # add some default plugins
+    sh(%Q{su - #{user} -c "sed -i 's!^plugins=.*!plugins=(asdf clipboard git python ruby sbt ubuntu zsh-autosuggestions zsh-syntax-highlighting)!' ~/.zshrc"})
+
+    # install some oh my zsh plugins
+
+    [
+      'https://github.com/zsh-users/zsh-syntax-highlighting',
+      'https://github.com/zsh-users/zsh-autosuggestions',
+      'https://github.com/zpm-zsh/clipboard'
+    ].each do |plugin_url|
+      plugin_name = File.basename(plugin_url)
+      unless File.exist?("/home/#{user}/.oh-my-zsh/custom/plugins/#{plugin_name}")
+        sh(%Q{su - #{user} -c "cd ~/.oh-my-zsh/custom/plugins && git clone #{plugin_url} & disown"})
+      end
+    end
+
+    # install asdf
+    unless File.exist?("/home/#{user}/.asdf")
+      sh(%Q{su - #{user} -c "git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0"})
+    end
+
+    %w(sbt java ruby python).each do |asdf_plugin|
+      unless File.exist?("/home/#{user}/.asdf/plugins/#{asdf_plugin}")
+        sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf plugin-add #{asdf_plugin}"})
+      end
+    end
+    # update asdf + plugins
+    sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf update && asdf plugin update --all"})
+
+    {
+      python: '3.7.4',
+      sbt: '1.2.6'
+    }.each do |tool, version|
+      sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "(source ~/.asdf/asdf.sh; asdf install #{tool} #{version}; asdf global #{tool} #{version}) & disown"})
+    end
+    # TODO: add talisman
   end
-  # TODO: add talisman
+
+  multitask :all_users => [user]
 end
+
+task :default => :all_users
