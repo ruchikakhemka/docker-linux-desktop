@@ -72,7 +72,7 @@ user_map.each do |user, pass|
       sh(%Q{su - #{user} -c "git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0"})
     end
 
-    %w(sbt java ruby python maven).each do |asdf_plugin|
+    %w(sbt java ruby python maven helm terraform kubectl).each do |asdf_plugin|
       unless File.exist?("/home/#{user}/.asdf/plugins/#{asdf_plugin}")
         sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "asdf plugin-add #{asdf_plugin}"})
       end
@@ -84,6 +84,9 @@ user_map.each do |user, pass|
       python: '3.7.4',
       sbt: '1.2.6',
       maven: '3.6.3',
+      helm: '3.3.4',
+      terraform: '0.13.3',
+      kubectl: '1.19.2',
     }.each do |tool, version|
       sh(%Q{su - #{user} -s /usr/bin/zsh -- -ilc "(source ~/.asdf/asdf.sh; asdf install #{tool} #{version}; asdf global #{tool} #{version}) & disown"})
     end
