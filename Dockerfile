@@ -30,10 +30,13 @@ RUN apt-get install -y \
     golang \
     vim \
     zsh man-db \
-    openjdk-8-jdk openjdk-8-jdk-headless
+    openjdk-8-jdk openjdk-8-jdk-headless \
+    jq \
+    # development libs (required by python eggs, ruby gems etc)
+    libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev \
 # desktop
-RUN apt-get install -y ubuntu-mate-desktop
-RUN apt-get purge -y command-not-found python3-commandnotfound
+    ubuntu-mate-desktop xclip \
+    && apt-get purge -y command-not-found python3-commandnotfound
 # browsers
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
     && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list \
@@ -70,10 +73,6 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -L "https://github.com/docker/compose/releases/download/1.27.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 ADD supervisor/dockerd.conf /etc/supervisor/conf.d/dockerd.conf
-
-RUN apt-get install -y jq xclip libffi-dev libssl-dev zlib1g-dev libbz2-dev \
-libreadline-dev libsqlite3-dev libncurses5-dev libncursesw5-dev \
-xz-utils tk-dev liblzma-dev
 
 ADD bootstrap.sh /
 ADD create-users /
