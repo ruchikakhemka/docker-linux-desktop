@@ -17,7 +17,8 @@ user_map = {
   prakash: '$6$CCqwu97Rgy.hCN$ZVAnSud.Yezak1afddJ8GZGTzhIoZuNW0SQft7.y57SnX9QX3w.IpJprOgRQfuiiuzRGWh/8nLedFXEfa6PC.1',
   sameer: '$6$9UuvPDRNFudX3i9$oEv370RijN.9m88wXzyrzJo/YQjV/fy1VxUlYWFyw57xPmJHLUZhmwDcALkopSFmLwvbGYxju71d55x6Qjb9z1',
   swati: '$6$M8Hgaqj3XcMFCrQ$2217tigyQ7Bdq1ajXi600ulX/duRWhEfrNADusjijufktxo4fD4U3plvi.hLXrMf7VSTGhbGp2zItmRQdZkH.',
-  rahul: '$6$SZ7AQduUc$DNUuQBLsL9ZJO55AGEbREhDM/G7mdAbP4FQjnar8uy4EQy9rIut1Nc2R.oNfqyzzUMGC2dfx/uJ2KqPKSo2Sd.'
+  rahul: '$6$SZ7AQduUc$DNUuQBLsL9ZJO55AGEbREhDM/G7mdAbP4FQjnar8uy4EQy9rIut1Nc2R.oNfqyzzUMGC2dfx/uJ2KqPKSo2Sd.',
+  saurabh: '$6$4qGJjuc6$RD.PkfH7QbU1BQlGaJH5dPrJUGX8epyBhCj6MfDPLQRTMLYKuocpQzZWXi/u8rowasRCugjN3UWVJ9QYVhato1',
 }
 
 user_map.each do |user, pass|
