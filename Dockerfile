@@ -38,7 +38,8 @@ RUN apt-get install -y \
     ubuntu-mate-desktop xclip \
 # remove unwanted cruft
     && apt-get purge -y command-not-found python3-commandnotfound \
-        libreoffice-* thunderbird transmission-*
+        libreoffice-* thunderbird transmission-* \
+    && apt-get autoremove -y
 # browsers
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
     && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list \
