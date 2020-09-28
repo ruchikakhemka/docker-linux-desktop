@@ -20,6 +20,7 @@ user_map = {
   rahul: '$6$SZ7AQduUc$DNUuQBLsL9ZJO55AGEbREhDM/G7mdAbP4FQjnar8uy4EQy9rIut1Nc2R.oNfqyzzUMGC2dfx/uJ2KqPKSo2Sd.',
   saurabh: '$6$4qGJjuc6$RD.PkfH7QbU1BQlGaJH5dPrJUGX8epyBhCj6MfDPLQRTMLYKuocpQzZWXi/u8rowasRCugjN3UWVJ9QYVhato1',
   ramg: '$6$I4vICQkNTN$PCYIZMcIz14NeotjXSBD6fwyWLT/QESL7Ku6Z8RcNcjAO4MU4Hy7Daj9JwSTRNdCa3rl/celESalRPGJF6Eu3/',
+  vishal: '$6$lJ/W7xMZGI3Z9B4p$zm9o3c6cnhWzYMy42cnxzf1GG5oc1mP8By0aOUYPKIjH78PNUyBxNdmiRLKyQMArqBSrce6OZ3qyDO/YRFFmk0',
 }
 
 user_map.each do |user, pass|
