@@ -36,7 +36,9 @@ RUN apt-get install -y \
     libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev libncursesw5-dev xz-utils tk-dev liblzma-dev \
 # desktop
     ubuntu-mate-desktop xclip \
-    && apt-get purge -y command-not-found python3-commandnotfound
+# remove unwanted cruft
+    && apt-get purge -y command-not-found python3-commandnotfound \
+        libreoffice-* thunderbird transmission-*
 # browsers
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - \
     && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list \
