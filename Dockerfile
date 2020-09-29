@@ -75,7 +75,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
 ADD supervisor/dockerd.conf /etc/supervisor/conf.d/dockerd.conf
 
 # add additional environment files
-ADD environment.d/10-nokogiri.conf /etc/environment.d/10-nokogiri.conf
+ADD profile.d/10-nokogiri.sh /etc/profile.d/10-nokogiri.sh
 
 ADD bootstrap.sh /
 ADD create-users /
