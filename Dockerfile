@@ -15,6 +15,7 @@ RUN apt-mark hold command-not-found python3-commandnotfound \
     && apt-get install -y locales \
     && locale-gen "en_US.UTF-8" \
     && update-locale LANG='en_US.UTF-8' LANGUAGE=en_US
+
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
@@ -72,6 +73,9 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
     && curl -L "https://github.com/docker/compose/releases/download/1.27.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 ADD supervisor/dockerd.conf /etc/supervisor/conf.d/dockerd.conf
+
+# add additional environment files
+ADD environment.d/10-nokogiri.conf /etc/environment.d/10-nokogiri.conf
 
 ADD bootstrap.sh /
 ADD create-users /
