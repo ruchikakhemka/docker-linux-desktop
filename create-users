@@ -21,6 +21,7 @@ user_map = {
   saurabh: '$6$4qGJjuc6$RD.PkfH7QbU1BQlGaJH5dPrJUGX8epyBhCj6MfDPLQRTMLYKuocpQzZWXi/u8rowasRCugjN3UWVJ9QYVhato1',
   ramg: '$6$I4vICQkNTN$PCYIZMcIz14NeotjXSBD6fwyWLT/QESL7Ku6Z8RcNcjAO4MU4Hy7Daj9JwSTRNdCa3rl/celESalRPGJF6Eu3/',
   vishal: '$6$lJ/W7xMZGI3Z9B4p$zm9o3c6cnhWzYMy42cnxzf1GG5oc1mP8By0aOUYPKIjH78PNUyBxNdmiRLKyQMArqBSrce6OZ3qyDO/YRFFmk0',
+  sambhav: '$6$pPVs/XDIfXIDDO$gX6n/lzW1lDc1MVUXyOrDiW1LdE9mJhLN3V.jAV4ADReDG/qj7IAEQkhpLJYZH89ncdU9VvOMxZSJJdXdLI3w/',
 }
 
 user_map.each do |user, pass|
